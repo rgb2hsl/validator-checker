@@ -13,6 +13,7 @@ const BEACONCHAIN_API_KEY = 'QVViMlRYS09GZmQ4ZTcxSG02OXpvTkJ1UTRNUg';
 const TELEGRAM_TOKEN = '7613542993:AAGMFEq6mMGHAPtfpyRWd885qyox2LF8FHg';
 const TELEGRAM_CHAT_ID = '9178664';
 const CHECK_INTERVAL = parseInt(process.env.CHECK_INTERVAL, 10) || 60000;
+const NOTIFY_IF_BELOW = parseInt(process.env.NOTIFY_IF_BELOW, 10) || null;
 
 async function getValidatorData() {
     try {
@@ -66,8 +67,19 @@ async function monitorBalance() {
     }
 
     if (currentBalance !== previousBalance) {
-        console.log('Balance changed');
-        await sendTelegramNotification(`Balance changed! New balance: ${currentBalance.toFixed(5)} ETH. Previous was ${previousBalance.toFixed(5)} ETH`);
+
+
+        if (NOTIFY_IF_BELOW !== null) {
+            if (currentBalance <= NOTIFY_IF_BELOW) {
+                console.log(`Balance changed and it's below ${NOTIFY_IF_BELOW}`);
+                await sendTelegramNotification(`Balance changed and it's below ${NOTIFY_IF_BELOW}!\nNew balance: ${currentBalance.toFixed(5)} ETH.\nPrevious was ${previousBalance.toFixed(5)} ETH`);
+            } else {
+                console.log(`Balance changed but it's not below ${NOTIFY_IF_BELOW}`);
+            }
+        } else {
+            console.log('Balance changed');
+            await sendTelegramNotification(`Balance changed!\nNew balance: ${currentBalance.toFixed(5)} ETH.\nPrevious was ${previousBalance.toFixed(5)} ETH`);
+        }
 
         // Сохранить новое значение баланса
         fs.writeFileSync('balance.txt', currentBalance.toFixed(5));

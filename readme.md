@@ -5,6 +5,7 @@
 1. Get validator id, beaconcha.in API key and our own Telegram bot. Below is guides for Telegram and Beaconcha.in.
 2. Put validator id into `VALIDATOR_ID=` value of `.env` (create it from example, if you haven't yet).
 2. Once it run, it will notify you each time validator balance changes.
+4. Use `NOTIFY_IF_BELOW` to notify ONLY when balance is below certain value (useful to indicate slashes).
 
 You can also change `CHECK_INTERVAL` if you want. It's in millis.
 
