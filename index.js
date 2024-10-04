@@ -66,23 +66,22 @@ async function monitorBalance() {
         console.info('No prev. balance. Create a balance.txt file');
     }
 
-    if (currentBalance !== previousBalance) {
-
-
+    if (currentBalance.toFixed(5) !== previousBalance.toFixed(5)) {
         if (NOTIFY_IF_BELOW !== null) {
             if (currentBalance <= NOTIFY_IF_BELOW) {
-                console.log(`Balance changed and it's below ${NOTIFY_IF_BELOW}`);
+                console.log(`Balance changed (prev is ${previousBalance.toFixed(5)}) and it's below ${NOTIFY_IF_BELOW}`);
                 await sendTelegramNotification(`Balance changed and it's below ${NOTIFY_IF_BELOW}!\nNew balance: ${currentBalance.toFixed(5)} ETH.\nPrevious was ${previousBalance.toFixed(5)} ETH`);
             } else {
-                console.log(`Balance changed but it's not below ${NOTIFY_IF_BELOW}`);
+                console.log(`Balance changed (prev is ${previousBalance.toFixed(5)}) but it's not below ${NOTIFY_IF_BELOW}`);
             }
         } else {
-            console.log('Balance changed');
+            console.log(`Balance changed (prev is ${previousBalance.toFixed(5)})`);
             await sendTelegramNotification(`Balance changed!\nNew balance: ${currentBalance.toFixed(5)} ETH.\nPrevious was ${previousBalance.toFixed(5)} ETH`);
         }
 
-        // Сохранить новое значение баланса
         fs.writeFileSync('balance.txt', currentBalance.toFixed(5));
+    } else {
+        console.log(`Balance isn't changed`);
     }
 }
 
