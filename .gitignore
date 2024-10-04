@@ -1,0 +1,9 @@
+# Environment variables
+.env
+
+# Node.js
+node_modules
+
+# balance storage
+balance.txt
+.idea
